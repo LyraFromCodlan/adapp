@@ -1,46 +1,50 @@
-from msilib.schema import Class
+#from msilib.schema import Class
 from attr import fields
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from test_service_app_1 import models
 
-from test_service_app_1.models import User
+from test_service_app_1.models import Company, CompanyAdmin, CompanyManager, User, Client
 
-class RegisterAdminForm(forms.Form):
-    ROLES=(
-            (1,"Admin"),
-            (2,"CompanyAdmin"),
-            (3,"CompanyManager"),
-        )
+class RegisterAdminForm(UserCreationForm):
+    #password=forms.CharField(widget=forms.PasswordInput)
+    class Meta(UserCreationForm):
+        model=CompanyAdmin
+        fields=('username','first_name','surname','role')
 
-    email = forms.EmailField(label='email', max_length=50,initial='something@gmail.com', required=True)
-    first_name = forms.CharField(label='Имя', max_length=50)
-    surname = forms.CharField(label='Фамилия', max_length=50)
-    password = forms.CharField(label="password",max_length=50, required=True,widget=forms.PasswordInput)
-    approve_password = forms.CharField(label="approve_password",max_length=50, required=True,widget=forms.PasswordInput)
-    role = forms.ChoiceField(label="Role",choices=ROLES ,help_text="You must choose one of the roles in the list", required=True)
+class CustomUserCreationForm(UserCreationForm):
 
-class RegisterUserForm(forms.Form):
-    ROLES=(
-        (1,"Admin"),
-        (2,"CompanyAdmin"),
-        (3,"CompanyManager"),
-    )
+    class Meta(UserCreationForm):
+        model = User
+        fields = ('username',)
 
-    email = forms.EmailField(label='email', max_length=50,initial='something@gmail.com', required=True)
-    first_name = forms.CharField(label='Имя', max_length=50)
-    surname = forms.CharField(label='Фамилия', max_length=50)
-    password = forms.CharField(label="password",max_length=50, required=True,widget=forms.PasswordInput)
-    approve_password = forms.CharField(label="approve_password",max_length=50, required=True,widget=forms.PasswordInput)
-    role = forms.ChoiceField(label="Role",choices=ROLES ,help_text="You must choose one of the roles in the list", required=True)
+class CustomUserChangeForm(UserChangeForm):
+
+    class Meta:
+        model = User
+        fields = ('username',)
+
+class RegisterUserForm(UserCreationForm):
+    class Meta(UserCreationForm):
+        model=CompanyManager
+        fields=('username','first_name','surname','role')
+
 
 
 class LoginForm(forms.Form):
-    ROLES=(
-        (1,"Admin"),
-        (2,"CompanyAdmin"),
-        (3,"CompanyManager"),
-    )
+    username=forms.EmailField()
+    password=forms.CharField(widget=forms.PasswordInput)
+    
 
-    email = forms.EmailField(label='email', max_length=50,initial='something@gmail.com', required=True)
-    password = forms.CharField(label="password",max_length=50, required=True,widget=forms.PasswordInput)
-    role = forms.ChoiceField(label="Role",choices=ROLES ,help_text="You must choose one of the roles in the list", required=True)
+class CompanyForm(forms.ModelForm):
+    class Meta:
+        model=Company
+        fields=('company_name','fio_otvetst','email_otvetst','phone_otvetst','business_id_number',
+        'business_kpp','full_company_name','post_index','street','house_number','building',
+        'office_number','bank_iik','raschet_schet','bank_name','correspondent_account',)
+
+class ClientForm(UserCreationForm):
+
+    class Meta(UserCreationForm):
+        name=Client
+        fields=('client_name','company_id','has_vk','has_fb','has_google','has_yandex','has_myTarget','has_tiktok')
