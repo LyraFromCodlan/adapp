@@ -93,6 +93,10 @@ class CompanyManager(User):
     # class Meta:
     #     db_table = "companys_managers"
 class Client(models.Model):
+
+    USERNAME_FIELD='client_name'
+    REQUIRED_FIELDS=['client_name','company_id']
+
     client_id = models.AutoField(primary_key=True)
     client_name = models.CharField('Имя клиента',max_length=50)
     company_id = models.ForeignKey(Company, default=None,blank=True, null=True, on_delete=models.SET_NULL)

@@ -191,7 +191,7 @@ def test_1(request):
 def test_2(request, company_id,client_name):
     form = ClientForm(data=request.POST)
     if request.method=="POST":
-        print(request.POST)
+        # print(request.POST)
         if form.is_valid():
             pass
             # print("\nForm is valid\n")
@@ -204,7 +204,20 @@ def test_2(request, company_id,client_name):
             # login(request,user)
             # # redirect to a new URL:
             # return HttpResponseRedirect('')
+
+
+            # client = Client()
+            # company = Company.objects.get(company_id=company_id)
+            # client.company_id = company
+            # client.client_name = client_name
+            # client.save()
         else:
+            data = request.POST
+            client = Client()
+            company = Company.objects.get(company_id=data['company_id'])
+            client.company_id = company
+            client.client_name = data['client_name']
+            client.save()
             print("\nForm is not valid\n")
     else:
         pass

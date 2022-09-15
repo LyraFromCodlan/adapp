@@ -46,5 +46,5 @@ class CompanyForm(forms.ModelForm):
 class ClientForm(UserCreationForm):
 
     class Meta(UserCreationForm):
-        name=Client
+        model=Client
         fields=('client_name','company_id','has_vk','has_fb','has_google','has_yandex','has_myTarget','has_tiktok')
